@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form >
+        <input type="text" id="username" name="username" placeholder="Enter your name" required>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
+        <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required>
+        <button type="submit" onclick="submitForm(event)">Submit</button>
+        <button onclick="getUsers()">Get users</button>
+        <div id="container"></div>
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js" integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        
+      async function submitForm(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const first_name = document.getElementById('first_name').value;
+            const last_name = document.getElementById('last_name').value;
+
+            await axios.post('http://127.0.0.1:8000/api/users/', {
+                username: username,
+                email: email,
+                password: password,
+                first_name: first_name,
+                last_name: last_name
+            })
+            .then(function (response) {
+                console.log(response.data);
+                alert("User created successfully!");
+            }).catch(function (error) {
+                console.error(error);
+                alert("Error creating user: " + error.response.data.detail);
+            });
+
+        }
+
+
+        async function getUsers() {
+            await axios.get('http://127.0.0.1:8000/api/users/')
+            .then(function (response) {
+                let users = response.data;
+                const container = document.getElementById('container');
+                container.innerHTML = ''; // Clear previous results
+                users.map((users, index)=>{
+                    container.innerHTML += `<div key=${index}>${users.username} - ${users.email} - ${users.first_name} - ${users.last_name}</div>
+                    <button onclick="getIndividual('${users.id}')">Get Individual</button>
+                    <button onclick="updateUser(event, '${users.id}')">Update</button>
+                    <button onclick="deleteUser('${users.id}')">Delete</button>`
+                })
+                console.log(response.data);
+                alert("Users fetched successfully!");
+            }).catch(function (error) {
+                console.error(error);
+                alert("Error fetching users: " + error.response.data.detail);
+            });
+        }
+
+        async function getIndividual(id){
+            let user = await axios.get(`http://127.0.0.1:8000/api/users/${id}/`)
+            .then(function (response) {
+                console.log(response.data);
+                alert("User fetched successfully!");
+            }).catch(function (error) {
+                console.error(error);
+                alert("Error fetching user: " + error.response.data.detail);
+            });
+
+        }
+
+        async function updateUser(event, id){
+            event.preventDefault(); // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const first_name = document.getElementById('first_name').value;
+            const last_name = document.getElementById('last_name').value;
+
+            let user = await axios.put(`http://127.0.0.1:8000/api/users/${id}/`, {
+                username: username,
+                email: email,
+                password: password,
+                first_name: first_name,
+                last_name: last_name
+            })
+            .then(function (response) {
+                console.log(response.data);
+                alert("User updated successfully!");
+            }).catch(function (error) {
+                console.error(error);
+                alert("Error updating user: " + error.response.data.detail);
+            });}
+
+            async function deleteUser(id){
+            let user = await axios.delete(`http://127.0.0.1:8000/api/users/${id}/`)
+            .then(function (response) {
+                console.log(response.data);
+                alert("User deleted successfully!");
+            }).catch(function (error) {
+                console.error(error);
+                alert("Error deleting user: " + error.response.data.detail);
+            });
+        }
+    </script>
+</body>
+</html>
