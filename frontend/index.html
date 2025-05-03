@@ -28,7 +28,7 @@
             const first_name = document.getElementById('first_name').value;
             const last_name = document.getElementById('last_name').value;
 
-            await axios.post('http://127.0.0.1:8000/api/users/', {
+            await axios.post('https://jagan0408.pythonanywhere.com/api/users/', {
                 username: username,
                 email: email,
                 password: password,
@@ -47,7 +47,7 @@
 
 
         async function getUsers() {
-            await axios.get('http://127.0.0.1:8000/api/users/')
+            await axios.get('https://jagan0408.pythonanywhere.com/api/users/')
             .then(function (response) {
                 let users = response.data;
                 const container = document.getElementById('container');
@@ -67,7 +67,7 @@
         }
 
         async function getIndividual(id){
-            let user = await axios.get(`http://127.0.0.1:8000/api/users/${id}/`)
+            let user = await axios.get(`https://jagan0408.pythonanywhere.com/api/users/${id}/`)
             .then(function (response) {
                 console.log(response.data);
                 alert("User fetched successfully!");
@@ -87,7 +87,7 @@
             const first_name = document.getElementById('first_name').value;
             const last_name = document.getElementById('last_name').value;
 
-            let user = await axios.put(`http://127.0.0.1:8000/api/users/${id}/`, {
+            let user = await axios.put(`https://jagan0408.pythonanywhere.com/api/users/${id}/`, {
                 username: username,
                 email: email,
                 password: password,
@@ -103,7 +103,7 @@
             });}
 
             async function deleteUser(id){
-            let user = await axios.delete(`http://127.0.0.1:8000/api/users/${id}/`)
+            let user = await axios.delete(`https://jagan0408.pythonanywhere.com/api/users/${id}/`)
             .then(function (response) {
                 console.log(response.data);
                 alert("User deleted successfully!");
